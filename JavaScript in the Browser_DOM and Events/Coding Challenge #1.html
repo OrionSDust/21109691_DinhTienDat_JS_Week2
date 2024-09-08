@@ -1,0 +1,104 @@
+<!-- Implement a game rest functionality, so that the player can make a new guess!
+Your tasks:
+1. Select the element with the 'again' class and attach a click event handler
+2. In the handler function, restore initial values of the 'score' and
+'secretNumber' variables
+3. Restore the initial conditions of the message, number, score and guess input
+fields
+4. Also restore the original background color (#222) and number width (15rem) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guessing Game</title>
+    <style>
+        /* Initial styles */
+        .number {
+            width: 15rem;
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            font-size: 6rem;
+            border-radius: 50%;
+        }
+        .message {
+            font-size: 2rem;
+        }
+        .guess {
+            font-size: 1.5rem;
+            margin: 10px;
+        }
+        .score {
+            font-size: 2rem;
+            margin: 10px;
+        }
+        button {
+            font-size: 1.5rem;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="message">Start guessing...</div>
+    <div class="number">?</div>
+    <input type="number" class="guess" placeholder="Enter a number">
+    <button class="check">Check!</button>
+    <button class="again">Play Again!</button>
+    <div class="score">Score: 20</div>
+
+    <script>
+        // Initial values
+        let score = 20;
+        let secretNumber = Math.floor(Math.random() * 20) + 1;
+
+        // Function to handle game reset
+        function resetGame() {
+            // Restore initial values
+            score = 20;
+            secretNumber = Math.floor(Math.random() * 20) + 1;
+
+            // Restore UI elements
+            document.querySelector('.message').textContent = 'Start guessing...';
+            document.querySelector('.number').textContent = '?';
+            document.querySelector('.score').textContent = `Score: ${score}`;
+            document.querySelector('.guess').value = '';
+
+            // Restore styles
+            document.querySelector('.number').style.width = '15rem';
+            document.querySelector('.number').style.backgroundColor = '#222';
+        }
+
+        // Function to handle guess checking
+        function checkGuess() {
+            const guess = Number(document.querySelector('.guess').value);
+            const messageElement = document.querySelector('.message');
+            const numberElement = document.querySelector('.number');
+
+            if (!guess) {
+                messageElement.textContent = 'Please enter a number!';
+                return;
+            }
+
+            if (guess === secretNumber) {
+                messageElement.textContent = 'Congratulations! You guessed it right!';
+                numberElement.textContent = secretNumber;
+                numberElement.style.backgroundColor = '#60b347'; // Green color for success
+            } else {
+                if (score > 1) {
+                    messageElement.textContent = guess > secretNumber ? 'Too high!' : 'Too low!';
+                    score--;
+                    document.querySelector('.score').textContent = `Score: ${score}`;
+                } else {
+                    messageElement.textContent = 'Game over! The number was ' + secretNumber;
+                    document.querySelector('.score').textContent = 'Score: 0';
+                }
+            }
+        }
+
+        // Attach event handlers
+        document.querySelector('.check').addEventListener('click', checkGuess);
+        document.querySelector('.again').addEventListener('click', resetGame);
+    </script>
+</body>
+</html>
